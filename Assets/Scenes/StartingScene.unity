@@ -1705,8 +1705,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveStats: {fileID: 11400000, guid: 2abc00e2dfc94054e8bebf2669202c58, type: 2}
-  _feetColl: {fileID: 1797013193}
-  _bodyColl: {fileID: 1989869002}
+  feetCollider: {fileID: 1989869002}
+  bodyCollider: {fileID: 1797013193}
 --- !u!1 &1368293673
 GameObject:
   m_ObjectHideFlags: 0
@@ -1980,6 +1980,14 @@ PrefabInstance:
     - target: {fileID: 3412988818080604936, guid: eb82091e73795ac4095934f2945e73dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444218968069368501, guid: eb82091e73795ac4095934f2945e73dd, type: 3}
+      propertyPath: m_Size.y
+      value: 0.2521397
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444218968069368501, guid: eb82091e73795ac4095934f2945e73dd, type: 3}
+      propertyPath: m_Offset.y
+      value: -1.2057273
       objectReference: {fileID: 0}
     - target: {fileID: 8729843522534249525, guid: eb82091e73795ac4095934f2945e73dd, type: 3}
       propertyPath: m_Material
