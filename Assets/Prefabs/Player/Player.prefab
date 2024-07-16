@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8393503240763578566}
   - component: {fileID: 40808626861120462}
   - component: {fileID: 8729843522534249525}
+  - component: {fileID: 2195551516273363823}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -124,7 +125,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 13349251d9ec845458f3c35a4ce412a9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -135,6 +136,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &2195551516273363823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716704651937842319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558573bcabb6a5d46b5758e550abb20a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveStats: {fileID: 11400000, guid: 2abc00e2dfc94054e8bebf2669202c58, type: 2}
+  feetCollider: {fileID: 6444218968069368501}
+  bodyCollider: {fileID: 7193549120065904049}
 --- !u!1 &3934861839986488350
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +215,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.1954166}
+  m_Offset: {x: 0, y: -1.1984333}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -210,7 +226,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.23151803}
+  m_Size: {x: 0.830019, y: 0.23755145}
   m_EdgeRadius: 0
 --- !u!1 &4547528796575837473
 GameObject:
@@ -276,8 +292,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.032019854, y: -0.3628943}
-  m_Size: {x: 1.0336671, y: 1.5673354}
+  m_Offset: {x: -0.018098354, y: -0.3681668}
+  m_Size: {x: 1.0272846, y: 1.5567904}
   m_Direction: 0
 --- !u!1 &9189535646533719660
 GameObject:
