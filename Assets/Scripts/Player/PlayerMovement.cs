@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public PlayerMovementStats MoveStats;
     [SerializeField] private Collider2D feetCollider;
     [SerializeField] private Collider2D bodyCollider;
+    [SerializeField] private Animator animator;
 
     [Header("Cameras")]
     [SerializeField] private GameObject cameraFollowPlayer;
@@ -47,15 +48,20 @@ public class PlayerMovement : MonoBehaviour
     private float coyoteTimer;
 
     private CameraFollowObject cameraFollowObject;
+    private float fallSpeedYDampingChangeThreshold;
 
-    void Awake()
+    private void Awake()
     {
         facingRight = true;
 
         rb = GetComponent<Rigidbody2D>();
 
-        cameraFollowObject = cameraFollowPlayer.GetComponent<CameraFollowObject>();
-    }
+		cameraFollowObject = cameraFollowPlayer.GetComponent<CameraFollowObject>();
+
+        animator = gameObject.GetComponent<Animator>();
+
+        fallSpeedYDampingChangeThreshold = CameraManager.instance.fallSpeedYDampingChangeThreshold;
+	}
 
 	private void Update()
 	{
@@ -66,11 +72,25 @@ public class PlayerMovement : MonoBehaviour
 	private void FixedUpdate()
 	{
         CollisionChecks();
+        //TurnCheck();
         Jump();
 
         if (isGrounded)
 			Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
         else Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
+
+        //if we are flaling past a certain threshold
+        if (rb.velocity.y < fallSpeedYDampingChangeThreshold && !CameraManager.instance.IsLerpingYDamping && !CameraManager.instance.LerpedFromPlayerFalling)
+            CameraManager.instance.LerpYDamping(true);
+
+        //if we are standing still or moving up
+        if (rb.velocity.y >= 0f && !CameraManager.instance.IsLerpingYDamping && CameraManager.instance.LerpedFromPlayerFalling)
+        {
+            //reset so it can be called again
+            CameraManager.instance.LerpedFromPlayerFalling = false;
+
+            CameraManager.instance.LerpYDamping(false);
+        }
 	}
 
 	private void OnDrawGizmos()
@@ -87,6 +107,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (moveInput != Vector2.zero)
         {
+            animator.SetBool("Running", true);
             TurnCheck(moveInput);
 
             //check if needs to turn
@@ -101,20 +122,21 @@ public class PlayerMovement : MonoBehaviour
 		}
         else if (moveInput == Vector2.zero)
         {
-            moveSpeed = Vector2.Lerp(moveSpeed, Vector2.zero, deceleration * Time.fixedDeltaTime);
+			animator.SetBool("Running", false);
+			moveSpeed = Vector2.Lerp(moveSpeed, Vector2.zero, deceleration * Time.fixedDeltaTime);
             rb.velocity = new Vector2(moveSpeed.x, rb.velocity.y);
         }
     }
 
-    private void TurnCheck(Vector2 moveInput)
-    {
-        if (facingRight && moveInput.x < 0)
-            Turn(false);
-        else if (!facingRight && moveInput.x > 0)
-            Turn(true);
+	private void TurnCheck(Vector2 moveInput)
+	{
+		if (facingRight && moveInput.x < 0)
+			Turn(false);
+		else if (!facingRight && moveInput.x > 0)
+			Turn(true);
 	}
 
-    private void Turn(bool turnRight)
+	private void Turn(bool turnRight)
     {
         if (turnRight)
         {

@@ -151,6 +151,9 @@ MonoBehaviour:
   MoveStats: {fileID: 11400000, guid: 2abc00e2dfc94054e8bebf2669202c58, type: 2}
   feetCollider: {fileID: 6444218968069368501}
   bodyCollider: {fileID: 7193549120065904049}
+  animator: {fileID: 40808626861120462}
+  cameraFollowPlayer: {fileID: 0}
+  facingRight: 0
 --- !u!1 &3934861839986488350
 GameObject:
   m_ObjectHideFlags: 0

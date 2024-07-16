@@ -10,6 +10,8 @@ public class CameraFollowObject : MonoBehaviour
 	[Header("Flip Rotation Stats")]
 	[SerializeField] private float flipYRotationTime = 0.5f;
 
+	private Coroutine turnCoroutine;
+
     private PlayerMovement player;
 
     private bool isFacingRight;
@@ -28,7 +30,8 @@ public class CameraFollowObject : MonoBehaviour
 
 	public void CallTurn()
 	{
-		LeanTween.rotateY(gameObject, DetermineEndRotation(), flipYRotationTime).setEaseInOutSine();
+		turnCoroutine = StartCoroutine(FlipYLerp());
+		//LeanTween.rotateY(gameObject, DetermineEndRotation(), flipYRotationTime).setEaseInOutSine();
 	}
 
 	private IEnumerator FlipYLerp()
