@@ -31,7 +31,7 @@ public class PlayerMovementStats : ScriptableObject
 	[Range(1f, 5f)] public int NumberOfJumpsAllowed = 2;
 
 	[Header("Jump Cut")]
-	[Range(0.02f, 0.3f)] public float TimeForUpwardsCancel = 0.027f;
+	[Range(0.002f, 0.3f)] public float TimeForUpwardsCancel = 0.027f;
 
 	[Header("Jump Apex")]
 	[Range(0.5f, 1f)] public float ApexThreshold = 0.97f;
