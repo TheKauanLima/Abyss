@@ -19,11 +19,14 @@ public class CameraManager : MonoBehaviour
 	public bool LerpedFromPlayerFalling { get; set; }
 
 	private Coroutine lerpYPanCoroutine;
+	private Coroutine panCameraCoroutine;
 
 	private CinemachineVirtualCamera currentCamera;
 	private CinemachineFramingTransposer framingTransposer;
 
 	private float normYPanAmount;
+
+	private Vector2 startingTrackedObjectOffset;
 
 	private void Awake()
 	{
@@ -32,15 +35,21 @@ public class CameraManager : MonoBehaviour
 
 		for (int i = 0; i < allVirtualCameras.Length; i++)
 		{
-			//set current active camera
-			currentCamera = allVirtualCameras[i];
+			if (allVirtualCameras[i].enabled)
+			{
+				//set current active camera
+				currentCamera = allVirtualCameras[i];
 
-			//set the framing transposer
-			framingTransposer = currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+				//set the framing transposer
+				framingTransposer = currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+			}
 		}
 
 		//set the YDamping amount so it's based on the inspector value
 		normYPanAmount = framingTransposer.m_YDamping;
+
+		//set the starting position of the tracked object offset
+		startingTrackedObjectOffset = framingTransposer.m_TrackedObjectOffset;
 	}
 
 	#region Lerp the Y Damping
@@ -80,5 +89,106 @@ public class CameraManager : MonoBehaviour
 
 		IsLerpingYDamping = false;
 	}
+	#endregion
+
+	#region Pan Camera
+
+	public void PanCameraOnContact(float panDistance, float panTime, PanDirection panDirection, bool panToStartingPos)
+	{
+		panCameraCoroutine = StartCoroutine(PanCamera(panDistance, panTime, panDirection, panToStartingPos));
+	}
+
+	private IEnumerator PanCamera(float panDistance, float panTime, PanDirection panDirection, bool panToStartingPos)
+	{
+		Vector2 endPos = Vector2.zero;
+		Vector2 startPos = Vector2.zero;
+
+		//handle pan from trigger
+		if (!panToStartingPos)
+		{
+			//set the direction and distance
+			switch (panDirection)
+			{
+				case PanDirection.Up:
+					endPos = Vector2.up;
+					break;
+				case PanDirection.Down:
+					endPos = Vector2.down;
+					break;
+				case PanDirection.Left:
+					endPos = Vector2.right;
+					break;
+				case PanDirection.Right:
+					endPos = Vector2.left;
+					break;
+				default:
+					break;
+			}
+
+			endPos *= panDistance;
+
+			startPos = startingTrackedObjectOffset;
+
+			endPos += startPos;
+		}
+
+		//handle the pan back to starting position
+		else
+		{
+			startPos = framingTransposer.m_TrackedObjectOffset;
+			endPos = startingTrackedObjectOffset;
+		}
+
+		//handle the actual panning of the camera
+		float elapsedTime = 0f;
+		while(elapsedTime < panTime)
+		{
+			elapsedTime += Time.deltaTime;
+
+			Vector3 panLerp = Vector3.Lerp(startPos, endPos, (elapsedTime / panTime));
+			framingTransposer.m_TrackedObjectOffset = panLerp;
+
+			yield return null;
+		}
+	}
+
+	#endregion
+
+	#region Swap Cameras
+
+	public void SwapCamera(CinemachineVirtualCamera cameraFromLeft, CinemachineVirtualCamera cameraFromRight, Vector2 triggerExitDirection)
+	{
+		//if the current camera is the camera on the left and our trigger exit direction was on the right
+		if (currentCamera == cameraFromLeft && triggerExitDirection.x > 0f)
+		{
+			//activate the new camera
+			cameraFromRight.enabled = true;
+
+			//deactivate the old camera
+			cameraFromLeft.enabled = false;
+
+			//set the new camera as the current camera
+			currentCamera = cameraFromRight;
+
+			//update our composer variable
+			framingTransposer = currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+		}
+		//if the current camera is the camera on the left and our trigger exit direction was on the right
+		else if (currentCamera == cameraFromLeft && triggerExitDirection.x < 0f)
+		{
+			//activate the new camera
+			cameraFromLeft.enabled = true;
+
+			//deactivate the old camera
+			cameraFromRight.enabled = false;
+
+			//set the new camera as the current camera
+			currentCamera = cameraFromLeft;
+
+			//update our composer variable
+			framingTransposer = currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+		}
+	}
+
 	#endregion
 }
