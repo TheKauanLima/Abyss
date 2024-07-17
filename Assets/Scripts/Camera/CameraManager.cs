@@ -174,7 +174,7 @@ public class CameraManager : MonoBehaviour
 			framingTransposer = currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
 		}
 		//if the current camera is the camera on the left and our trigger exit direction was on the right
-		else if (currentCamera == cameraFromLeft && triggerExitDirection.x < 0f)
+		else if (currentCamera == cameraFromRight && triggerExitDirection.x < 0f)
 		{
 			//activate the new camera
 			cameraFromLeft.enabled = true;

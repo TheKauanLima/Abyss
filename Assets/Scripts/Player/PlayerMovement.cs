@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public PlayerMovementStats MoveStats;
     [SerializeField] private Collider2D feetCollider;
     [SerializeField] private Collider2D bodyCollider;
-    [SerializeField] private Animator animator;
+    private Animator animator;
 
     [Header("Cameras")]
     [SerializeField] private GameObject cameraFollowPlayer;
@@ -59,8 +59,11 @@ public class PlayerMovement : MonoBehaviour
 		cameraFollowObject = cameraFollowPlayer.GetComponent<CameraFollowObject>();
 
         animator = gameObject.GetComponent<Animator>();
+	}
 
-        fallSpeedYDampingChangeThreshold = CameraManager.instance.fallSpeedYDampingChangeThreshold;
+	private void Start()
+	{
+		fallSpeedYDampingChangeThreshold = CameraManager.instance.fallSpeedYDampingChangeThreshold;
 	}
 
 	private void Update()
