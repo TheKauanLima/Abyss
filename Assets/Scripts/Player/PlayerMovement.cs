@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     //collision check vars
     private RaycastHit2D groundHit;
     private RaycastHit2D headHit;
-    private bool isGrounded;
+    public bool isGrounded;
     private bool isHeadBumped;
 
     //jump vars
@@ -74,11 +75,14 @@ public class PlayerMovement : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+            return;
+
         CollisionChecks();
         //TurnCheck();
         Jump();
 
-        if (isGrounded)
+			if (isGrounded)
 			Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
         else Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
 

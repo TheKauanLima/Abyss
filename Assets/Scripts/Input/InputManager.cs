@@ -16,11 +16,14 @@ public class InputManager : MonoBehaviour
 	public static bool InteractWasPressed;
 	public static bool SubmitWasPressed;
 
+	public static bool SelectWasPressed;
+
 	private InputAction _moveAction;
     private InputAction _jumpAction;
 	private InputAction _runAction;
 	private InputAction _interactAction;
 	private InputAction _submitAction;
+	private InputAction _selectAction;
 
 	private void Awake()
     {
@@ -31,6 +34,7 @@ public class InputManager : MonoBehaviour
         _runAction = PlayerInput.actions["Run"];
 		_interactAction = PlayerInput.actions["Interact"];
 		_submitAction = PlayerInput.actions["Submit"];
+		_selectAction = PlayerInput.actions["Select"];
 	}
 
     private void Update()
@@ -45,5 +49,6 @@ public class InputManager : MonoBehaviour
 
 		InteractWasPressed = _interactAction.WasPressedThisFrame();
 		SubmitWasPressed = _submitAction.WasPressedThisFrame();
+		SelectWasPressed = _selectAction.WasPressedThisFrame();
 	}
 }
