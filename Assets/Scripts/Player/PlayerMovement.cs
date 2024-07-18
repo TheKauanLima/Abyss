@@ -14,10 +14,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Cameras")]
     [SerializeField] private GameObject cameraFollowPlayer;
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     //movement vars
-    private Vector2 moveSpeed;
+    public Vector2 moveSpeed;
     public bool facingRight;
 
     //collision check vars

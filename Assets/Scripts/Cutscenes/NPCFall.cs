@@ -7,11 +7,14 @@ using UnityEngine.Playables;
 public class NPCFall : MonoBehaviour
 {
     private PlayableDirector playableDirector;
-	[SerializeField] private Animator playerAnimator;
+	private Animator playerAnimator;
+	private PlayerMovement playerMovement;
 
 	private void Awake()
 	{
 		playableDirector = GetComponent<PlayableDirector>();
+		playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
+		playerAnimator = GameObject.Find("Player").GetComponent<Animator>();
 	}
 
 	private void Update()
@@ -25,7 +28,7 @@ public class NPCFall : MonoBehaviour
 		if (collide.CompareTag("Player"))
 		{
 			playableDirector.enabled = true;
-			collide.transform.parent.parent.GetComponent<PlayerMovement>().enabled = false;
+			playerMovement.enabled = false;
 			collide.transform.parent.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 			playerAnimator.SetBool("Running", false);
 		}
@@ -33,7 +36,7 @@ public class NPCFall : MonoBehaviour
 
 	private void EnableMovement()
 	{
-		GameObject.Find("Player").GetComponent<PlayerMovement>().enabled = true;
+		playerMovement.enabled = true;
 		GameObject.Find("LockPosition").GetComponent<CinemachineVirtualCamera>().enabled = false;
 		GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>().enabled = true;
 	}
